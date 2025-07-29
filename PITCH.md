@@ -1,12 +1,20 @@
-# SkillLadder - A Website That Gives Voice to the Invisible Workforce
+# SkillLadder – Empowering Local Workers, Digitally
 
-In India, millions of skilled and semi-skilled workers go unseen — not because they lack ability, but because they lack digital access.
+## Problem
 
-SkillLadder is a web platform that lets workers speak their skills, upload photos of their work, and get matched to local jobs — all in their own language, with just a few taps.
+Millions of daily wage and semi-skilled workers in India lack access to reliable digital platforms to showcase their abilities or find work. Existing job portals are complex, require resumes, and demand high digital literacy. Employers looking for local short-term help also struggle to connect with nearby talent quickly.
 
-Our site supports voice-to-text, photo uploads, and local notifications. It’s built for users with low digital literacy, low-end devices, and limited internet.
+## Solution
 
-No complex forms. No resumes. Just visibility, connection, and opportunity.
+SkillLadder is a grassroots, mobile-first web platform that connects workers and job posters through an intuitive, accessible interface. Workers can post profiles using **voice input** and **photo uploads**, while employers can create jobs with the same simplicity. The platform works **offline-friendly**, uses **local storage**, and requires **no advanced tech knowledge** to use.
 
-SkillLadder isn’t just a website. It’s a movement for inclusion, dignity, and livelihood — one job, one voice at a time.
+## Social Impact
 
+- Boosts employment and financial inclusion at the bottom of the pyramid
+- Empowers users with **low digital literacy** through simple design
+- Promotes visibility for **informal sector workers**
+- Requires minimal data, making it accessible in **low-connectivity areas**
+
+## Vision
+
+To build a nationwide microjob ecosystem where every skilled hand — no matter how humble — has a digital presence, a fair opportunity, and a dignified livelihood. SkillLadder aspires to bridge the last-mile employment gap using **inclusive design**, **AI-driven accessibility**, and **local-first thinking**.
