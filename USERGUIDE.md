@@ -1,8 +1,8 @@
-## 👥 User Guide
+## User Guide
 
 SkillLadder is a web application with two main user flows: one for **workers** (daily wage/semi-skilled) and one for **job posters/admins** (local employers).
 
-### 👷 For Workers
+### For Workers
 
 1. **Login/Access Site**
    - No registration needed. Workers can directly access the platform homepage.
@@ -23,7 +23,7 @@ SkillLadder is a web application with two main user flows: one for **workers** (
 
 ---
 
-### 🧑‍💼 For Job Posters / Admin
+### For Job Posters / Admin
 
 1. **Login/Access Admin Portal**
    - Navigate to the admin/job poster section (URL or tab).
@@ -44,7 +44,7 @@ SkillLadder is a web application with two main user flows: one for **workers** (
 
 ---
 
-### 🧠 Accessibility Features
+### Accessibility Features
 
 - **Voice-to-Text**: Supports speech input for users with low literacy.
 - **Pictorial Aids**: Icons and images guide users through each step.
