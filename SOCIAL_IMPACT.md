@@ -21,7 +21,7 @@ Our goal is to make employment **inclusive, accessible, and dignified** for mill
 
 
 
-# ♿ Accessibility Statement
+# Accessibility Statement
 
 Our platform is intentionally designed to be **accessible for low-literacy and grassroots users** by following these principles:
 
