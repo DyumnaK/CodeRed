@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillLadder - Voice Skill Entry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .record-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 18px;
+            padding: 20px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+            min-width: 200px;
+        }
+
+        .record-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .record-btn:active {
+            transform: translateY(0);
+        }
+
+        .record-btn.recording {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .status {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #666;
+            min-height: 24px;
+        }
+
+        .status.listening {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .transcript-area {
+            width: 100%;
+            min-height: 120px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 15px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .transcript-area:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: #2ecc71;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .submit-btn.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .submit-btn.enabled:hover {
+            background: #27ae60;
+            transform: translateY(-1px);
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .language-selector {
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid #e1e8ed;
+            font-size: 14px;
+            background: white;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .record-btn {
+                padding: 18px 30px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🪜 SkillLadder</div>
+        <h1>Tell us your skills</h1>
+        <p class="subtitle">Speak naturally about what you can do</p>
+        
+        <div class="language-selector">
+            <select id="languageSelect">
+                <option value="en-US">English</option>
+                <option value="hi-IN">हिंदी (Hindi)</option>
+                <option value="ta-IN">தமிழ் (Tamil)</option>
+                <option value="te-IN">తెలుగు (Telugu)</option>
+            </select>
+        </div>
+
+        <button id="recordBtn" class="record-btn">
+            🎙️ Start Recording
+        </button>
+
+        <div id="status" class="status">Click the button and start speaking</div>
+
+        <textarea 
+            id="transcript" 
+            class="transcript-area" 
+            placeholder="Your spoken skills will appear here..."
+            readonly
+        ></textarea>
+
+        <button id="submitBtn" class="submit-btn">
+            💾 Save Skills
+        </button>
+
+        <div id="successMessage" class="success-message">
+            ✅ Skills saved successfully! Ready for your SkillLadder profile.
+        </div>
+    </div>
+
+    <script>
+        class VoiceRecorder {
+            constructor() {
+                this.recognition = null;
+                this.isRecording = false;
+                this.initElements();
+                this.initSpeechRecognition();
+            }
+
+            initElements() {
+                this.recordBtn = document.getElementById('recordBtn');
+                this.status = document.getElementById('status');
+                this.transcript = document.getElementById('transcript');
+                this.submitBtn = document.getElementById('submitBtn');
+                this.successMessage = document.getElementById('successMessage');
+                this.languageSelect = document.getElementById('languageSelect');
+
+                this.recordBtn.addEventListener('click', () => this.toggleRecording());
+                this.submitBtn.addEventListener('click', () => this.saveSkills());
+            }
+
+            initSpeechRecognition() {
+                if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                    this.status.textContent = 'Speech recognition not supported in this browser';
+                    this.recordBtn.disabled = true;
+                    return;
+                }
+
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                this.recognition = new SpeechRecognition();
+                
+                this.recognition.continuous = true;
+                this.recognition.interimResults = true;
+                this.recognition.lang = this.languageSelect.value;
+
+                this.recognition.onstart = () => {
+                    this.isRecording = true;
+                    this.recordBtn.textContent = '⏹️ Stop Recording';
+                    this.recordBtn.classList.add('recording');
+                    this.status.textContent = 'Listening... Speak now';
+                    this.status.classList.add('listening');
+                };
+
+                this.recognition.onresult = (event) => {
+                    let finalTranscript = '';
+                    let interimTranscript = '';
+
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript + ' ';
+                        } else {
+                            interimTranscript += transcript;
+                        }
+                    }
+
+                    this.transcript.value = (this.transcript.value + finalTranscript).trim();
+                    
+                    if (this.transcript.value.length > 0) {
+                        this.submitBtn.classList.add('enabled');
+                    }
+                };
+
+                this.recognition.onend = () => {
+                    this.isRecording = false;
+                    this.recordBtn.textContent = '🎙️ Start Recording';
+                    this.recordBtn.classList.remove('recording');
+                    this.status.textContent = this.transcript.value ? 'Recording complete!' : 'Click the button and start speaking';
+                    this.status.classList.remove('listening');
+                };
+
+                this.recognition.onerror = (event) => {
+                    this.status.textContent = 'Error occurred: ' + event.error;
+                    this.isRecording = false;
+                    this.recordBtn.textContent = '🎙️ Start Recording';
+                    this.recordBtn.classList.remove('recording');
+                    this.status.classList.remove('listening');
+                };
+
+                this.languageSelect.addEventListener('change', () => {
+                    this.recognition.lang = this.languageSelect.value;
+                });
+            }
+
+            toggleRecording() {
+                if (this.isRecording) {
+                    this.recognition.stop();
+                } else {
+                    this.transcript.value = '';
+                    this.submitBtn.classList.remove('enabled');
+                    this.successMessage.style.display = 'none';
+                    this.recognition.start();
+                }
+            }
+
+            saveSkills() {
+                if (this.transcript.value.trim()) {
+                    this.submitBtn.textContent = 'Saving...';
+                    this.submitBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        this.successMessage.style.display = 'block';
+                        this.submitBtn.textContent = '💾 Save Skills';
+                        this.submitBtn.disabled = false;
+                        
+                        // Scroll to show the success message
+                        this.successMessage.scrollIntoView({ behavior: 'smooth' });
+                    }, 1500);
+                }
+            }
+        }
+
+        // Initialize the voice recorder when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new VoiceRecorder();
+        });
+    </script>
+</body>
+</html>

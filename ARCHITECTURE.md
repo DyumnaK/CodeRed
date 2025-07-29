@@ -1,0 +1,1 @@
+![Architecture Flowchart](assets/architecture.jpeg)
