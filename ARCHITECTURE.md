@@ -1,0 +1,1 @@
+![Architecture Flowchart](/Users/ananya/Downloads/architecture.jpeg)
